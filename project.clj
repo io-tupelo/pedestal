@@ -15,8 +15,7 @@
    [io.pedestal/pedestal.route "0.5.7"]
    [io.pedestal/pedestal.service "0.5.7"]
    [prismatic/schema "1.1.12"]
-   [tupelo "0.9.181"]
-
+   [tupelo "0.9.182"]
    ]
 
   ; Using `lein-ancient check :all` checks plugins

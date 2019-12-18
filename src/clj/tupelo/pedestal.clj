@@ -16,45 +16,8 @@
     [io.pedestal.test :as pedtst]
     [schema.core :as s]
     [tupelo.schema :as tsk]
+    [tupelo.pedestal.headers :as hdrs]
     ))
-
-; #todo write http-headers->text and http-headers->edn to convert keys
-(def html-headers-edn
-  {:accept                            "Accept"
-   :application-edn                   "application/edn"
-   :application-json                  "application/json"
-   :application-xml                   "application/xml"
-   :content-security-policy           "Content-Security-Policy"
-   :content-type                      "Content-Type"
-   :location                          "Location"
-   :strict-transport-security         "Strict-Transport-Security"
-   :text-html                         "text/html"
-   :text-javascript                   "text/javascript"
-   :text-plain                        "text/plain"
-   :x-content-type-options            "X-Content-Type-Options"
-   :x-download-options                "X-Download-Options"
-   :x-frame-options                   "X-Frame-Options"
-   :x-permitted-cross-domain-policies "X-Permitted-Cross-Domain-Policies"
-   :x-xss-protection                  "X-XSS-Protection"} )
-
-;-----------------------------------------------------------------------------
-; http string constants
-(def accept                                       "Accept")
-(def application-edn                              "application/edn")
-(def application-json                             "application/json")
-(def application-xml                              "application/xml")
-(def content-security-policy                      "Content-Security-Policy")
-(def content-type                                 "Content-Type")
-(def location                                     "Location")
-(def strict-transport-security                    "Strict-Transport-Security")
-(def text-html                                    "text/html")
-(def text-javascript                              "text/javascript")
-(def text-plain                                   "text/plain")
-(def x-content-type-options                       "X-Content-Type-Options")
-(def x-download-options                           "X-Download-Options")
-(def x-frame-options                              "X-Frame-Options")
-(def x-permitted-cross-domain-policies            "X-Permitted-Cross-Domain-Policies")
-(def x-xss-protection                             "X-XSS-Protection")
 
 ;-----------------------------------------------------------------------------
 ; Plumatic Schema type definitions

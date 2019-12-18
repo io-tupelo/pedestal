@@ -9,12 +9,12 @@
   (:require
     [schema.core :as s]
     [tst.tupelo.pedestal-data :as tst-data]
+    [tupelo.pedestal.headers :as hdrs]
   ))
 
-
  (dotest
-   (is= content-type "Content-Type")
-   (is= text-html "text/html"))
+   (is= hdrs/content-type "Content-Type")
+   (is= hdrs/text-html "text/html"))
 
  (dotest
    (let [dummy-handler    identity
