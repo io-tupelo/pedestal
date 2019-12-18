@@ -1,11 +1,10 @@
 
 = Making Pedestal Even Sweeter
 
-=== image:https://img.shields.io/clojars/v/tupelo.svg[link="http://clojars.org/tupelo"] <= Current Version (click for dep string)
-=== image:https://cljdoc.org/badge/tupelo/tupelo[link="https://cljdoc.org/d/tupelo/tupelo/CURRENT"] <= Full API docs (click for cljdoc.org)
+=== image:https://img.shields.io/clojars/v/io.tupelo/pedestal.svg [link="https://clojars.org/io.tupelo/pedestal"] <= Current Version (click for dep string)
+=== image:https://cljdoc.org/badge/io.tupelo/pedestal[link="https://cljdoc.org/d/io.tupelo/pedestal"] <= Full API docs (click for cljdoc.org)
 
 == Tupelo Pedestal Overview
 
 Helper functions for the Pedestal library
-
 
