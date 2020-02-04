@@ -1,4 +1,4 @@
-(defproject io.tupelo/pedestal "19.12.01"
+(defproject io.tupelo/pedestal "20.02.03"
   :description "Pedestal With A Spoonful of Honey"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
@@ -15,7 +15,7 @@
    [io.pedestal/pedestal.route "0.5.7"]
    [io.pedestal/pedestal.service "0.5.7"]
    [prismatic/schema "1.1.12"]
-   [tupelo "0.9.182"]
+   [tupelo "0.9.189"]
    ]
 
   ; Using `lein-ancient check :all` checks plugins

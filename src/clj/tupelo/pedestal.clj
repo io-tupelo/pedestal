@@ -119,10 +119,13 @@
 
 
 ;---------------------------------------------------------------------------------------------------
-(defonce ctx-trim-queue-stack (atom true))
+(def ctx-trim-enable
+  "Flag to control automatic trimming of interceptor-chain control information."
+  (atom true))
 (defn ctx-trim [ctx] ; #todo need test
-  "Removes `:queue` and `:stack` entries from the context map to declutter printing"
-  (if @ctx-trim-queue-stack
+  "Removes seldom-used keys from interceptor-chain context map to declutter debug printouts
+  (:queue, :stack, :terminators)."
+  (if @ctx-trim-enable
     (dissoc ctx
       :io.pedestal.interceptor.chain/queue  ; NOT ALWAYS PRESENT!
       :io.pedestal.interceptor.chain/stack
@@ -174,30 +177,39 @@
    ::http/host          "0.0.0.0" ; *** CRITICAL ***  to make server listen on ALL IP addrs not just `localhost`
    ::http/join?         true ; true => block the starting thread (want this for supervisord in prod); false => don't block
    ::http/resource-path "public" ; => use "resources/public" as base (see also ::http/file-path)
+   ::http/routes        nil ; <= user-supplied
    })
 
-(def ^:no-doc service-state (atom nil))
+(def ^:no-doc service-state
+  "Holds onto the Pedestal Service state returned by io.pedestal.http/create-server"
+  (atom nil))
 
 (defn service-fn
   "Returns the `service-function` (which can be used for testing via pedestal.test/response-for)"
   []
   (grab ::http/service-fn @service-state))
 
-;(defn server-start!
-;  "Starts the Jetty HTTP server for a Pedestal service as configured via `define-service`"
-;  []
-;  (swap! service-state http/start))
-;
-;(defn server-stop!
-;  "Stops the Jetty HTTP server."
-;  []
-;  (swap! service-state http/stop))
-;
-;(defn server-restart!
-;  "Stops and restarts the Jetty HTTP server for a Pedestal service"
-;  []
-;  (server-stop!)
-;  (server-start!))
+(defn server-start!
+  "Starts the Jetty HTTP server for a Pedestal service as configured via `define-service`"
+  []
+  (http/start @service-state))
+
+(defn server-stop!
+  "Stops the Jetty HTTP server."
+  []
+  (http/stop @service-state))
+
+(defn server-restart!
+  "Stops and restarts the Jetty HTTP server for a Pedestal service"
+  []
+  (server-stop!)
+  (server-start!))
+
+(s/defn server-config!
+  ([] (server-config! {}))
+  ([server-opts :- tsk/KeyMap]
+    (let [opts-to-use (glue default-service-map server-opts)]
+      (reset! service-state (http/create-server opts-to-use)))))
 
 (defmacro with-service
   "Run the forms in the context of a Pedestal service definition"
@@ -214,10 +226,10 @@
   [service-map & forms]
   `(with-service ~service-map
      (try
-       (swap! service-state http/start) ; sends log output to stdout
+       (server-start!) ; sends log output to stdout
        ~@forms
        (finally
-         (swap! service-state http/stop)))))
+         (server-stop!)))))
 
 (s/defn invoke-interceptors
   "Given a context and a vector of interceptor-maps, invokes the interceptor chain
