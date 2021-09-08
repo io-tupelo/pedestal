@@ -123,9 +123,9 @@
   "Flag to control automatic trimming of interceptor-chain control information."
   (atom true))
 (s/defn ctx-trim :- tsk/KeyMap
-  [ctx :- tsk/KeyMap] ; #todo need test
   "Removes seldom-used keys from interceptor-chain context map to declutter debug printouts
   (:queue, :stack, :terminators)."
+  [ctx :- tsk/KeyMap] ; #todo need test
   (if @ctx-trim-enable
     (dissoc ctx
       :io.pedestal.interceptor.chain/queue  ; NOT ALWAYS PRESENT!
