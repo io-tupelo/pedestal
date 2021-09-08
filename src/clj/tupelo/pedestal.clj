@@ -122,7 +122,8 @@
 (def ctx-trim-enable
   "Flag to control automatic trimming of interceptor-chain control information."
   (atom true))
-(defn ctx-trim [ctx] ; #todo need test
+(s/defn ctx-trim :- tsk/KeyMap
+  [ctx :- tsk/KeyMap] ; #todo need test
   "Removes seldom-used keys from interceptor-chain context map to declutter debug printouts
   (:queue, :stack, :terminators)."
   (if @ctx-trim-enable
@@ -243,7 +244,23 @@
   "Given that a Pedestal service has been defined, return the response for an HTTP GET request.
   Does not require a running Jetty server."
   [& args]
+ ;(spyx :tupelo.pedestal/service-get args)
   (let [full-args (prepend (service-fn) :get args)]
+   ;(spyx :tupelo.pedestal/service-get full-args)
+    (apply pedtst/response-for full-args)))
+
+(defn service-post
+  "Given that a Pedestal service has been defined, return the response for an HTTP POST request.
+  Does not require a running Jetty server."
+  [& args]
+  (let [full-args (prepend (service-fn) :post args)]
+    (apply pedtst/response-for full-args)))
+
+(defn service-delete
+  "Given that a Pedestal service has been defined, return the response for an HTTP DELETE request.
+  Does not require a running Jetty server."
+  [& args]
+  (let [full-args (prepend (service-fn) :delete args)]
     (apply pedtst/response-for full-args)))
 
 
