@@ -1,4 +1,4 @@
-(defproject io.tupelo/pedestal "20.02.03"
+(defproject io.tupelo/pedestal "21.09.07"
   :description "Pedestal With A Spoonful of Honey"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
