@@ -168,8 +168,18 @@
    [name ctx]
    (definterceptor-impl name ctx))
 
+;---------------------------------------------------------------------------------------------------
+; Response helper functions
+(defn ok
+  "Wraps response for status=OK as:  {:status 200 :body body}"
+  [body] {:status 200 :body body})
+
+(defn not-found
+  "Returns response for status=Not Found:  {:status 404 :body 'Not found\n'}"
+  [] {:status 404 :body "Not found\n"})
 
 ;---------------------------------------------------------------------------------------------------
+; Pedestal/Jetty server stuff
 
 (def default-service-map
   "Default options for configuring a Pedestal service"

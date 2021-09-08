@@ -1,4 +1,4 @@
-(defproject io.tupelo/pedestal "21.09.07"
+(defproject io.tupelo/pedestal "21.09.08"
   :description "Pedestal With A Spoonful of Honey"
   :license {:name "Eclipse Public License"
             :url  "http://www.eclipse.org/legal/epl-v10.html"}
@@ -11,11 +11,11 @@
 
   :dependencies
   [
-   [io.pedestal/pedestal.jetty "0.5.7"]
-   [io.pedestal/pedestal.route "0.5.7"]
-   [io.pedestal/pedestal.service "0.5.7"]
+   [io.pedestal/pedestal.jetty "0.5.9"]
+   [io.pedestal/pedestal.route "0.5.9"]
+   [io.pedestal/pedestal.service "0.5.9"]
    [prismatic/schema "1.1.12"]
-   [tupelo "0.9.189"]
+   [tupelo "21.09.07"]
    ]
 
   ; Using `lein-ancient check :all` checks plugins
@@ -25,10 +25,8 @@
   :test-refresh {:quiet true ; true => suppress printing namespaces when testing
                  }
 
-  :profiles {:provided {:dependencies [[org.clojure/clojure "1.8.0" :scope "provided"] ]}
-             :dev      {:dependencies [ [org.clojure/clojure "1.10.1"] ] }
-             :1.8      {:dependencies [[org.clojure/clojure "1.8.0"]]}
-             :1.9      {:dependencies [[org.clojure/clojure "1.9.0"]]}
+  :profiles {:provided {:dependencies [[org.clojure/clojure "1.8.0" :scope "provided"]]}
+             :dev      {:dependencies [[org.clojure/clojure "1.10.3"]]}
              }
   :source-paths ["src/clj" "src/cljc"]
   :test-paths ["test/clj" "test/cljc"]
