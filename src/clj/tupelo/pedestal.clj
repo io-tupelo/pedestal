@@ -9,14 +9,15 @@
   (:use tupelo.core)
   (:require
     [clojure.set :as set]
+    [clojure.walk :as walk]
     [io.pedestal.http :as http]
-   ;[io.pedestal.http.route :as route]
     [io.pedestal.interceptor :as interceptor]
     [io.pedestal.interceptor.chain :as chain]
     [io.pedestal.test :as pedtst]
     [schema.core :as s]
-    [tupelo.schema :as tsk]
     [tupelo.pedestal.headers :as hdrs]
+    [tupelo.schema :as tsk]
+    [tupelo.string :as str]
     ))
 
 ;-----------------------------------------------------------------------------
@@ -119,19 +120,21 @@
 
 
 ;---------------------------------------------------------------------------------------------------
-(def ctx-trim-enable
+(def ^:dynamic *ctx-trim-enable*
   "Flag to control automatic trimming of interceptor-chain control information."
-  (atom true))
-(s/defn ctx-trim :- tsk/KeyMap
+  true)
+
+(defn walk-ctx-trim
   "Removes seldom-used keys from interceptor-chain context map to declutter debug printouts
-  (:queue, :stack, :terminators)."
-  [ctx :- tsk/KeyMap] ; #todo need test
-  (if @ctx-trim-enable
-    (dissoc ctx
-      :io.pedestal.interceptor.chain/queue  ; NOT ALWAYS PRESENT!
-      :io.pedestal.interceptor.chain/stack
-      :io.pedestal.interceptor.chain/terminators )
-    ctx))
+  (i.e. ':io.pedestal.interceptor.chain/*')."
+  [data]
+  (cond-it-> data
+    (truthy? *ctx-trim-enable*)
+    (walk/postwalk (fn [item]
+                     (cond-it-> item
+                       (and (map-entry? it)
+                         (str/contains-match? (str (key it)) #"^:io.pedestal.interceptor.chain/")) nil))
+      it)))
 
 ;---------------------------------------------------------------------------------------------------
 (defn ^:no-doc definterceptor-impl
