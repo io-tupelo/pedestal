@@ -17,6 +17,10 @@
   (is= hdrs/text-html "text/html"))
 
 (dotest
+  (is= (ok "testing...") {:status 200, :body "testing..."})
+  (is= (not-found) {:status 404, :body "Not found\n"}))
+
+(dotest
   (let [dummy-handler     identity
         dummy-constraints (constantly true)]
     ; we use wildcard match `:*` for interceptors/handler
