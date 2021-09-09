@@ -185,7 +185,7 @@
 ; Pedestal/Jetty server stuff
 
 (def default-service-map
-  "Default options for configuring a Pedestal service"
+  "Default options for configuring a Pedestal webserver"
   {::http/type          :jetty
    ::http/port          8890 ; default port
    ::http/host          "0.0.0.0" ; *** CRITICAL ***  to make server listen on ALL IP addrs not just `localhost`
@@ -200,18 +200,15 @@
 
 (defn service-fn
   "Returns the `service-function` (which can be used for testing via pedestal.test/response-for)"
-  []
-  (grab ::http/service-fn @service-state))
+  [] (grab ::http/service-fn @service-state))
 
 (defn server-start!
   "Starts the Jetty HTTP server for a Pedestal service as configured via `define-service`"
-  []
-  (http/start @service-state))
+  [] (http/start @service-state))
 
 (defn server-stop!
   "Stops the Jetty HTTP server."
-  []
-  (http/stop @service-state))
+  [] (http/stop @service-state))
 
 (defn server-restart!
   "Stops and restarts the Jetty HTTP server for a Pedestal service"
@@ -226,7 +223,7 @@
       (reset! service-state (http/create-server opts-to-use)))))
 
 (defmacro with-service
-  "Run the forms in the context of a Pedestal service definition"
+  "Run the forms in the context of a Pedestal service definition, but w/o starting the Jetty webserver."
   [service-map & forms]
   `(let [opts-to-use# (glue default-service-map ~service-map)]
      (reset! service-state (http/create-server opts-to-use#))
@@ -236,11 +233,11 @@
          (reset! service-state nil)))))
 
 (defmacro with-server
-  "Start & stop the server, even if exception occurs."
+  "Run the forms in the context of a Jetty webserver.  Upon completion, stops the server even if exception occurs."
   [service-map & forms]
   `(with-service ~service-map
      (try
-       (server-start!) ; sends log output to stdout
+       (server-start!) ; sends log output to stdout/stderr
        ~@forms
        (finally
          (server-stop!)))))
@@ -254,24 +251,19 @@
     (chain/execute ctx pedestal-interceptors)))
 
 (defn service-get
-  "Given that a Pedestal service has been defined, return the response for an HTTP GET request.
-  Does not require a running Jetty server."
+  "In the context of (with-service ...), executes an HTTP GET request. "
   [& args]
- ;(spyx :tupelo.pedestal/service-get args)
   (let [full-args (prepend (service-fn) :get args)]
-   ;(spyx :tupelo.pedestal/service-get full-args)
     (apply pedtst/response-for full-args)))
 
 (defn service-post
-  "Given that a Pedestal service has been defined, return the response for an HTTP POST request.
-  Does not require a running Jetty server."
+  "In the context of (with-service ...), executes an HTTP POST request. "
   [& args]
   (let [full-args (prepend (service-fn) :post args)]
     (apply pedtst/response-for full-args)))
 
 (defn service-delete
-  "Given that a Pedestal service has been defined, return the response for an HTTP DELETE request.
-  Does not require a running Jetty server."
+  "In the context of (with-service ...), executes an HTTP DELETE request. "
   [& args]
   (let [full-args (prepend (service-fn) :delete args)]
     (apply pedtst/response-for full-args)))
