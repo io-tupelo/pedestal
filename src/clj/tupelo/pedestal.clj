@@ -13,7 +13,7 @@
     [io.pedestal.http :as http]
     [io.pedestal.interceptor :as interceptor]
     [io.pedestal.interceptor.chain :as chain]
-    [io.pedestal.test :as pedtst]
+    [io.pedestal.test :as pest]
     [schema.core :as s]
     [tupelo.pedestal.headers :as hdrs]
     [tupelo.schema :as tsk]
@@ -254,19 +254,19 @@
   "In the context of (with-service ...), executes an HTTP GET request. "
   [& args]
   (let [full-args (prepend (service-fn) :get args)]
-    (apply pedtst/response-for full-args)))
+    (apply pest/response-for full-args)))
 
 (defn service-post
   "In the context of (with-service ...), executes an HTTP POST request. "
   [& args]
   (let [full-args (prepend (service-fn) :post args)]
-    (apply pedtst/response-for full-args)))
+    (apply pest/response-for full-args)))
 
 (defn service-delete
   "In the context of (with-service ...), executes an HTTP DELETE request. "
   [& args]
   (let [full-args (prepend (service-fn) :delete args)]
-    (apply pedtst/response-for full-args)))
+    (apply pest/response-for full-args)))
 
 
 
