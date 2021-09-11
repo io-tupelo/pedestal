@@ -11,10 +11,10 @@
 
   :dependencies
   [
+   [http-kit "2.5.3"]
    [io.pedestal/pedestal.jetty "0.5.9"]
    [io.pedestal/pedestal.route "0.5.9"]
    [io.pedestal/pedestal.service "0.5.9"]
-   [http-kit "2.5.3"]
    [prismatic/schema "1.1.12"]
    [tupelo "21.09.07"]
    ]
